@@ -8,7 +8,9 @@ pygame.display.set_caption("Pong")
 
 clock = pygame.time.Clock()
 
+volume = 0.5
 pygame.mixer.music.load('Background_Music_Pong.mp3')
+pygame.mixer.music.set_volume(volume)  # Set volume (0.0 to 1.0)
 pygame.mixer.music.play(-1)
 
 locationX = window_width / 2
@@ -74,7 +76,7 @@ while running == True:
     if locationY <= 25 or locationY >= (window_height - 50):
         ball_speed_y = -ball_speed_y  # Reverse the vertical direction
 
-    # Basic Paddles Movement
+    # Key checks
     keys = pygame.key.get_pressed()
     if keys[pygame.K_z] and y_paddle2 > 0:
         y_paddle2 -= 10
@@ -82,6 +84,13 @@ while running == True:
         y_paddle2 += 10
     if keys[pygame.K_ESCAPE]:
         running = False
+    if keys[pygame.K_q]:
+        volume -= 0.1 if volume != 0.0 else 0.0
+        pygame.mixer.music.set_volume(volume)
+    if keys[pygame.K_d]:
+        volume += 0.1 if volume != 1.0 else 0.0
+        pygame.mixer.music.set_volume(volume)
+    
     # Simple AI for paddle1
     if locationY < y_paddle1 + 62.5 and y_paddle1 > 0:
         y_paddle1 -= 10
