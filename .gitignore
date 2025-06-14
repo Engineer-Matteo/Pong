@@ -9,3 +9,8 @@ env/
 
 # VS Code
 .vscode/
+
+# PyInstaller files
+build/
+dist/
+pong.spec
