@@ -24,8 +24,9 @@ y_paddle2 = window_height / 2 - 50
 font = pygame.font.Font(None, 74)
 score1 = 0
 score2 = 0
+paddle2_size = 125
 
-start_state = [locationX, locationY, ball_speed_x, ball_speed_y, ball_acceleration, y_paddle1, y_paddle2, score1, score2]
+start_state = [locationX, locationY, ball_speed_x, ball_speed_y, ball_acceleration, y_paddle1, y_paddle2, score1, score2, paddle2_size]
 
 def Basic_Ball_Movement(locationX, locationY, ball_speed_x, ball_speed_y, ball_acceleration, score1, score2):
     pygame.draw.ellipse(window, (255, 255, 255), (locationX, locationY, 25, 25))
@@ -41,7 +42,7 @@ def Basic_Ball_Movement(locationX, locationY, ball_speed_x, ball_speed_y, ball_a
         score2 += 1
         locationX = window_width / 2
         locationY = window_height / 2
-        ball_speed_x = 5
+        ball_speed_x = -5
         ball_speed_y = 1
     else:
         ball_speed_x += ball_acceleration if ball_speed_x > 0 else -ball_acceleration
@@ -64,7 +65,7 @@ while running == True:
     # Check for collision with paddles
     ball_rect = pygame.Rect(locationX, locationY, 25, 25)
     paddle1_rect = pygame.Rect(window_width - 25, y_paddle1, 25, 125)
-    paddle2_rect = pygame.Rect(0, y_paddle2, 25, 125)
+    paddle2_rect = pygame.Rect(0, y_paddle2, 25, paddle2_size)
 
     if ball_rect.colliderect(paddle1_rect) or ball_rect.colliderect(paddle2_rect):
         ball_speed_x = -ball_speed_x  # Reverse the horizontal direction
@@ -91,6 +92,8 @@ while running == True:
     if keys[pygame.K_d]:
         volume += 0.1 if volume != 1.0 else 0.0
         pygame.mixer.music.set_volume(volume)
+    if keys[pygame.K_LSHIFT]:
+        paddle2_size = 250
     
     # Simple AI for paddle1
     if locationY < y_paddle1 + 62.5 and y_paddle1 > 0:
@@ -111,8 +114,8 @@ while running == True:
     window.blit(score_text1, (50, window_height - 100))
     window.blit(score_text2, (window_width - 100, window_height - 100))
 
-    # If the difference in scores is 5, game ends
-    if abs(score1 - score2) >= 5:
+    # If the difference in scores is 3, game ends
+    if abs(score1 - score2) >= 3:
         game_end = True
         if score1 > score2:
             game_over = font.render("You Win!", True, (255, 255, 255))
@@ -130,7 +133,7 @@ while running == True:
                     running = False
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_RETURN:
-                        locationX, locationY, ball_speed_x, ball_speed_y, ball_acceleration, y_paddle1, y_paddle2, score1, score2 = start_state
+                        locationX, locationY, ball_speed_x, ball_speed_y, ball_acceleration, y_paddle1, y_paddle2, score1, score2, paddle2_size = start_state
                         game_end = False
                     if event == pygame.K_ESCAPE:
                         game_end = False
